@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { Pool } = require('pg');
+const bcrypt = require('bcryptjs');
 
 // PostgreSQL configuration
 const pool = new Pool({
@@ -16,8 +17,9 @@ const pool = new Pool({
 router.post('/', async (req, res) => {
   try {
     const { username, password, email, contact_number, subject_expertise } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
     const query = 'INSERT INTO teachers (username, password, email, contact_number, subject_expertise) VALUES ($1, $2, $3, $4, $5) RETURNING *';
-    const values = [username, password, email, contact_number, subject_expertise];
+    const values = [username, hashedPassword, email, contact_number, subject_expertise];
     const result = await pool.query(query, values);
     res.json(result.rows[0]);
   } catch (error) {

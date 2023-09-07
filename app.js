@@ -25,6 +25,9 @@ app.use('/api/teachers', teachersRoutes);
 const studentsRoutes = require('./routes/students');
 app.use('/api/students', studentsRoutes);
 
+const authRoutes = require('./routes/auth');
+app.use('/auth', authRoutes);
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
