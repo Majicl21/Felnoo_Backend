@@ -12,6 +12,18 @@ const pool = new Pool({
   port: 5432,
 });
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  });
+  
+  const upload = multer({ storage: storage });
+  
+
 router.post('/homework-submission', upload.single('submission_file'), async (req, res) => {
     try {
       // Extract submission data from the request body
